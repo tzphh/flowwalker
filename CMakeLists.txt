@@ -23,13 +23,16 @@ set_property(TARGET ${TEST_SAMPLER} PROPERTY CUDA_ARCHITECTURES "70;75;80")
 target_link_libraries(${PROJECT_NAME} -lgflags)
 target_link_libraries(${TEST_SAMPLER} -lgflags)
 
+#调试选项
+target_compile_options(${PROJECT_NAME} PUBLIC -g -G)
+target_compile_options(${TEST_SAMPLER} PUBLIC -g -G)
 
 # enable compute-sanitizer
 target_compile_options(${PROJECT_NAME} PUBLIC -lineinfo)
 target_compile_options(${TEST_SAMPLER} PUBLIC -lineinfo)
 
-target_compile_options(${PROJECT_NAME} PUBLIC -O3)
-target_compile_options(${TEST_SAMPLER} PUBLIC -O3)
+# target_compile_options(${PROJECT_NAME} PUBLIC -O3)
+# target_compile_options(${TEST_SAMPLER} PUBLIC -O3)
 
 target_compile_options(${PROJECT_NAME} PUBLIC -maxrregcount=32)
 target_compile_options(${TEST_SAMPLER} PUBLIC -maxrregcount=32)

@@ -120,6 +120,7 @@ class Node2vec : public WalkerMeta {
       return w;
     }
   }
+  
   template <typename state_t>
   __device__ bool is_stop(int len, state_t* state) {
     return len >= max_depth;

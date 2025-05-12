@@ -16,58 +16,60 @@
 #include "myrand.cuh"
 #include "util.cuh"
 double wtime() {
-  double time[2];
-  struct timeval time1;
-  gettimeofday(&time1, NULL);
+    double time[2];
+    struct timeval time1;
+    gettimeofday(&time1, NULL);
 
-  time[0] = time1.tv_sec;
-  time[1] = time1.tv_usec;
+    time[0] = time1.tv_sec;
+    time[1] = time1.tv_usec;
 
-  return time[0] + time[1] * 1.0e-6;
+    return time[0] + time[1] * 1.0e-6;
 }
 
 __device__ uint binary_search(float* prob, int size, float target) {
-  int l = 0;
-  int r = size - 1;
-  while (l < r) {
-    int mid = (l + r) / 2;
-    if (prob[mid] > target) {
-      r = mid;
-    } else {
-      l = mid + 1;
+    int l = 0;
+    int r = size - 1;
+    while (l < r) {
+        int mid = (l + r) / 2;
+        if (prob[mid] > target) {
+            r = mid;
+        } else {
+            l = mid + 1;
+        }
     }
-  }
-  return l;
+    return l;
 }
 
 __global__ void warm_up_gpu() {
-  unsigned int tid = blockIdx.x * blockDim.x + threadIdx.x;
-  float ia, ib;
-  ia = ib = 0.0f;
-  ib += ia + tid;
+    unsigned int tid = blockIdx.x * blockDim.x + threadIdx.x;
+    float ia, ib;
+    ia = ib = 0.0f;
+    ib += ia + tid;
 }
 
 size_t get_avail_mem() {
-  int device;
-  cudaGetDevice(&device);
-  cudaDeviceProp prop;
-  cudaGetDeviceProperties(&prop, device);
-  size_t avail;
-  size_t total;
-  cudaMemGetInfo(&avail, &total);
-  printf(
-      "Amount of total memory: %g GB, avail memory: %g GB, take up: %g GB, "
-      "%g MB, %g KB\n",
-      total / (1024.0 * 1024.0 * 1024.0), avail / (1024.0 * 1024.0 * 1024.0),
-      (total - avail) / (1024.0 * 1024.0 * 1024.0),
-      (total - avail) / (1024.0 * 1024.0), (total - avail) / (1024.0));
-  return avail;
+    int device;
+    cudaGetDevice(&device);
+    cudaDeviceProp prop;
+    cudaGetDeviceProperties(&prop, device);
+    size_t avail;
+    size_t total;
+    cudaMemGetInfo(&avail, &total);
+    printf(
+        "Amount of total memory: %g GB, avail memory: %g GB, take up: %g GB, "
+        "%g MB, %g KB\n",
+        total / (1024.0 * 1024.0 * 1024.0), avail / (1024.0 * 1024.0 * 1024.0),
+        (total - avail) / (1024.0 * 1024.0 * 1024.0), (total - avail) / (1024.0 * 1024.0),
+        (total - avail) / (1024.0));
+    return avail;
 }
 
 int get_clk() {
-  int device;
-  int peak_clk = 1;
-  cudaGetDevice(&device);
-  cudaDeviceGetAttribute(&peak_clk, cudaDevAttrClockRate, device);
-  return peak_clk;
+    int device;
+    int peak_clk = 1;
+    cudaGetDevice(&device);
+    cudaDeviceGetAttribute(&peak_clk, cudaDevAttrClockRate, device);
+    return peak_clk;
 }
+
+// todo:加入动态更新逻辑

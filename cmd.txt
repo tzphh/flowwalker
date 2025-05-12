@@ -1,0 +1,14 @@
+mkdir build && cd build
+cmake .. -DCMAKE_CUDA_COMPILER=/usr/local/cuda-12.2/bin/nvcc
+make -j
+
+./data/EdgeListToCSR /home/wyt/wyt_code/flowwalker-artifact/data/gsh/gsh.txt /home/wyt/wyt_code/flowwalker-artifact/data/gsh/gsh 5
+
+./bin/flowwalker --input ../data/wiki-Vote/wiki-Vote --node2vec --n=14230 --d=80 --dprs
+
+./bin/flowwalker --input ../data/gsh/gsh --node2vec -n=61618242 --d=80 --dprs // OOM
+./bin/flowwalker --input ../data/twitter/twitter_tv --node2vec --n=83304460 --d=80 --dprs // OOM
+./bin/flowwalker --input ../data/friendster/friendster_unDir --node2vec --n=131216732 --d=80 --dprs // OOM, sopr也OOM
+
+./bin/flowwalker --input ../data/gsh/gsh --sopr -n=123236484 --d=80 --dprs
+./bin/flowwalker --input ../data/twitter/twitter_tv --sopr --n=166608920 --d=20 --dprs --alpha=0.2 // OOM

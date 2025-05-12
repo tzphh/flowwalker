@@ -22,6 +22,7 @@
 #include "app.cuh"
 #include "gpu_task.cuh"
 #include "myrand.cuh"
+#include <cuda.h>
 
 template <typename walker_t, typename state_t>
 __device__ inline vtx_t sampler_thread(walker_t* walker, Task* task,
@@ -30,8 +31,19 @@ __device__ inline vtx_t sampler_thread(walker_t* walker, Task* task,
   vtx_t size = task->degree;
 
   weight_t weight_sum = 0;
+
+  // 新增：统计 get_weight 执行总时间
+  unsigned int total_cycles = 0;
+
   for (int i = 0; i < size; i++) {
+    // 统计时间
+    unsigned int start_clock = clock();
+
     weight_t w = walker->get_weight(task, i);
+
+    unsigned int end_clock = clock();
+    total_cycles += (end_clock - start_clock);
+
     weight_sum += w;
     if (w > 0) {
       if (selected_id == -1) selected_id = 0;
@@ -40,6 +52,10 @@ __device__ inline vtx_t sampler_thread(walker_t* walker, Task* task,
       }
     }
   }
+
+  // // 输出耗时信息
+  // printf("Thread %d: total get_weight time = %u cycles\n", threadIdx.x, total_cycles);
+
   return selected_id;
 }
 

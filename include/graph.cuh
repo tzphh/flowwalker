@@ -43,8 +43,8 @@ inline off_t fsize(const char* filename) {
 
 class graph {
  public:
-  edge_t* xadj;
-  vtx_t* adjncy;
+  edge_t* xadj;           // beg_pos
+  vtx_t* adjncy;          // edge_list
   weight_t* weight;
   int* edge_label;
   vtx_t vert_count;
@@ -99,6 +99,7 @@ class graph {
     vert_count = fsize(xadj_file) / sizeof(vtx_t) - 1 - 2;
     edge_count = fsize(adjncy_file) / sizeof(edge_t);
 
+    // xadj_file 包含vert_count，edge_count 以及CSR的beg_pos（共vert_count+1个元素）
     file = fopen(xadj_file, "rb");
     if (file != NULL) {
       edge_t* tmp_xadj = NULL;
@@ -124,6 +125,7 @@ class graph {
       return 0;
     }
 
+    // adjncy_file 就是CSR文件里的edge_list
     file = fopen(adjncy_file, "rb");
     if (file != NULL) {
       vtx_t* tmp_adjncy = NULL;
@@ -200,12 +202,14 @@ class graph {
     }
     printf("\n");
   }
+
   void print_weight() {
     for (size_t i = 20000; i < 20100; i++) {
       printf("%f\t", weight[i]);
     }
     printf("\n");
   }
+
   void print_max_degree() {
     vtx_t max_degree = 0;
     vtx_t max_idx = 0;
@@ -218,6 +222,7 @@ class graph {
     }
     printf("Max degree: %d, idx: %d\n", max_degree, max_idx);
   }
+  
   vtx_t get_maxdegree_offset() {
     vtx_t max_degree = 0;
     vtx_t max_idx = 0;

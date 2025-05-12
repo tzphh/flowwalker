@@ -109,7 +109,7 @@ class gpu_graph {
     }
     // If we reach here, then element was not present
     return false;
-  }
+  } 
   __device__ bool check_connect(vtx_t src, vtx_t dst) {
     // check whether vertex src and dst are connected using binary search
     vtx_t src_degree = getDegree(src);
