@@ -1,0 +1,1 @@
+/home/wyt/gcc-12.1.0/bin/g++ @CMakeFiles/TestSampler.out.dir/objects1.rsp CMakeFiles/TestSampler.out.dir/cmake_device_link.o -o bin/TestSampler.out @CMakeFiles/TestSampler.out.dir/linkLibs.rsp -L"/usr/local/cuda-12.2/targets/x86_64-linux/lib/stubs" -L"/usr/local/cuda-12.2/targets/x86_64-linux/lib"
